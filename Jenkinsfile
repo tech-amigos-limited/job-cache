@@ -71,19 +71,19 @@ pipeline {
                     def jenkinsCredentialsId = 'techamigo-creds'
                     def jobName = "${JOB_NAME}"
 
-                    // jobBuildCacheDownload(bucketName,path,includes,excludes,jenkinsCredentialsId)
+                    jobBuildCacheDownload(bucketName,path,includes,excludes,jenkinsCredentialsId)
 
-                    purgeCache(bucketName,jobName,jenkinsCredentialsId)
+                    // purgeCache(bucketName,jobName,jenkinsCredentialsId)
                     
-                    jobBuildCacheUploadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
+                    // jobBuildCacheUploadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
 
                     sh """
                         touch ${WORKSPACE}/cache_folder/test4.txt
                         rm -f ${WORKSPACE}/cache_folder/test3.txt
                     """
-                    jobBuildCacheUploadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
+                    // jobBuildCacheUploadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
 
-                    // jobBuildCacheUpload(bucketName,path,includes,excludes,jenkinsCredentialsId)
+                    jobBuildCacheUpload(bucketName,path,includes,excludes,jenkinsCredentialsId)
                 
                 }
             
