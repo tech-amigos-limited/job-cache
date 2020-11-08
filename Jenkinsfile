@@ -20,7 +20,8 @@ def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredenti
 
         sh """
         rm -f /tmp/${tarString}
-        tar cf /tmp/${tarString} ${path}/
+        cd ${path}
+        tar cf /tmp/${tarString} .
         aws s3 cp /tmp/${tarString} s3://${bucketName}/
         """
     }
@@ -45,7 +46,7 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
             sh """
             rm -f /tmp/${tarString}
             aws s3 cp s3://${bucketName}/${tarString} /tmp/${tarString}
-            tar xvf /tmp/${tarString} -C ${path}/
+            tar xvf /tmp/${tarString} -C ${path}
             """
         }
     }
@@ -80,7 +81,7 @@ pipeline {
                     def bucketName = 'jenkins-jobs-cache'
                     def includes   = "cache_folder/**"
                     def excludes   = "*"
-                    def path       = "${WORKSPACE}/cache_folder/"
+                    def path       = "${WORKSPACE}/cache_folder/*"
                     def jenkinsCredentialsId = 'techamigo-creds'
                     def jobName = "${JOB_NAME}"
 
