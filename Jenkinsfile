@@ -33,7 +33,7 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
 
         def checkCacheinS3 = sh (
             returnStatus: true,
-            script: "aws s3 ls s3://${bucketName}/${tarString}"
+            script: "aws s3 ls s3://${bucketName}/${tarString} --output text"
         )
 
         echo "Shashi - ${checkCacheinS3}"
