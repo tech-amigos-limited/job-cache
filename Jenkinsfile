@@ -20,7 +20,7 @@ def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredenti
 
         sh """
         rm -f /tmp/${tarString}
-        tar cf /tmp/${tarString} ${path}
+        tar cf /tmp/${tarString} ${path}/
         aws s3 cp /tmp/${tarString} s3://${bucketName}/
         """
     }
