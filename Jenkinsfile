@@ -33,7 +33,7 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
 
         def checkCacheinS3 = sh (
             script: """
-                aws s3 ls s3://${bucketName}/${JOB_BASE_NAME} --output text
+                aws s3 ls s3://${bucketName}/${tarString} --output text
             """,
             returnStatus: true
         )
@@ -41,7 +41,7 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
         echo "${checkCacheinS3}"
 
 
-        if(checkCacheinS3 != "") {
+        if(checkCacheinS3 == 0) {
             sh """
             rm -f /tmp/${tarString}
             aws s3 cp s3://${bucketName}/${tarString} /tmp/${tarString}
