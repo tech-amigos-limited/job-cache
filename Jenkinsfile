@@ -17,9 +17,9 @@ def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredenti
     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${jenkinsCredentialsId}" , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
     {
         sh """
-        tar cf /${WORKSPACE}/${JOB_NAME} ${path}
+        tar cf ${WORKSPACE}/${JOB_BASE_NAME} ${path}
         ls -la /tmp/
-        aws s3 cp /tmp/${JOB_NAME} s3://${bucketName}/
+        aws s3 cp ${WORKSPACE}/${JOB_BASE_NAME} s3://${bucketName}/
         """
     }
 }
