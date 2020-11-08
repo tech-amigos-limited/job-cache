@@ -43,9 +43,9 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
 
         if(checkCacheinS3 == 0) {
             sh """
-            rm -f /tmp/${tarString}
-            aws s3 cp s3://${bucketName}/${tarString} /tmp/${tarString}
-            tar -xvf /tmp/${tarString} -C ${path}
+            rm -f /tmp/${tarString}.tar
+            aws s3 cp s3://${bucketName}/${tarString}.tar /tmp/${tarString}.tar
+            tar -xvf /tmp/${tarString}.tar -C ${path}
             """
         }
     }
