@@ -32,11 +32,11 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
         def tarString = JOB_NAME.replaceAll("/","-")
 
         def checkCacheinS3 = sh (
-            returnStatus: true,
             script: """
                 set +e
                 aws s3 ls s3://${bucketName}/${tarString} --output text
-            """
+            """,
+            returnStatus: true
         )
 
         echo "${checkCacheinS3}"
