@@ -16,7 +16,7 @@ def jobBuildCacheDownload(bucketName, path, includes, excludes, jenkinsCredentia
 def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredentialsId) {
     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${jenkinsCredentialsId}" , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
     {
-        def tarString = replace.JOB_NAME('/','_')
+        def tarString = JOB_NAME.replaceAll("/","-")
 
         sh """
         rm -f /tmp/${tarString}
@@ -29,7 +29,7 @@ def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredenti
 def jobBuildCacheDownloadTar(bucketName, path, includes, excludes, jenkinsCredentialsId) {
 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${jenkinsCredentialsId}" , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
     {
-        def tarString = replace.JOB_NAME('/','_')
+        def tarString = JOB_NAME.replaceAll("/","-")
 
         def checkCacheinS3 = sh (
             returnStatus: true,
