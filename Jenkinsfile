@@ -29,11 +29,12 @@ def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredenti
 def jobBuildCacheDownloadTar(bucketName, path, includes, excludes, jenkinsCredentialsId) {
 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${jenkinsCredentialsId}" , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
     {
-        def tarString = JOB_NAME.replaceAll("/","_")
+        def tarString = JOB_NAME.replaceAll("/","-")
 
         def checkCacheinS3 = sh (
             returnStatus: true,
-            script: "(aws s3 ls s3://${bucketName}/${tarString} --output text)"
+            script: """(aws s3 ls s3://${bucketName}/${tarString} --output text)
+            """
         )
 
         echo "Shashi - ${checkCacheinS3}"
