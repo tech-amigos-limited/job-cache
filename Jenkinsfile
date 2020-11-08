@@ -37,7 +37,7 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
             """
         )
 
-        echo "Shashi - ${checkCacheinS3}"
+        echo "${checkCacheinS3}"
 
 
         if(checkCacheinS3 != "") {
