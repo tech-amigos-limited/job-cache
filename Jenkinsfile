@@ -16,10 +16,12 @@ def jobBuildCacheDownload(bucketName, path, includes, excludes, jenkinsCredentia
 def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredentialsId) {
     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${jenkinsCredentialsId}" , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
     {
+        def tarString = replace.JOB_NAME('/','_')
+
         sh """
-        tar cf ${WORKSPACE}/${JOB_BASE_NAME} ${path}
-        ls -la /tmp/
-        aws s3 cp ${WORKSPACE}/${JOB_BASE_NAME} s3://${bucketName}/
+        rm -f /tmp/${tarString}
+        tar cf /tmp/${tarString} ${path}
+        aws s3 cp /tmp/${tarString} s3://${bucketName}/
         """
     }
 }
@@ -27,15 +29,18 @@ def jobBuildCacheUploadTar(bucketName, path, includes, excludes, jenkinsCredenti
 def jobBuildCacheDownloadTar(bucketName, path, includes, excludes, jenkinsCredentialsId) {
 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: "${jenkinsCredentialsId}" , secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
     {
+        def tarString = replace.JOB_NAME('/','_')
+
         def checkCacheinS3 = sh (
             returnStatus: true,
-            script: "aws s3 ls s3://${bucketName}/${JOB_NAME}"
+            script: "aws s3 ls s3://${bucketName}/${tarString}"
         )
 
         if(checkCacheinS3 != "") {
             sh """
-            aws s3 cp s3://${bucketName}/${JOB_NAME} /tmp/${JOB_NAME}
-            tar xvf /tmp/${JOB_NAME} -C ${path}
+            rm -f /tmp/${tarString}
+            aws s3 cp s3://${bucketName}/${tarString} /tmp/${tarString}
+            tar xvf /tmp/${tarString} -C ${path}
             """
         }
     }
@@ -76,7 +81,7 @@ pipeline {
 
                     purgeCache(bucketName,jobName,jenkinsCredentialsId)
                     
-                    jobBuildCacheUploadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
+                    jobBuildCacheDownloadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
 
                     sh """
                         touch ${WORKSPACE}/cache_folder/test4.txt
