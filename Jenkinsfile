@@ -36,6 +36,8 @@ withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariab
             script: "aws s3 ls s3://${bucketName}/${tarString}"
         )
 
+        echo "Shashi - ${checkCacheinS3}"
+
         if(checkCacheinS3 != "") {
             sh """
             rm -f /tmp/${tarString}
