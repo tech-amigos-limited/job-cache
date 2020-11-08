@@ -74,6 +74,8 @@ pipeline {
     stages {
         stage('Build Cache') {
             steps {
+                cleanWs()
+                checkout scm
                 script {
                     def bucketName = 'jenkins-jobs-cache'
                     def includes   = "cache_folder/**"
