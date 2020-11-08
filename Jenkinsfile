@@ -79,7 +79,7 @@ pipeline {
 
                     // jobBuildCacheDownload(bucketName,path,includes,excludes,jenkinsCredentialsId)
 
-                    purgeCache(bucketName,jobName,jenkinsCredentialsId)
+                    // purgeCache(bucketName,jobName,jenkinsCredentialsId)
                     
                     jobBuildCacheDownloadTar(bucketName,path,includes,excludes,jenkinsCredentialsId)
 
